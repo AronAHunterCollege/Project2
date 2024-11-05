@@ -5,14 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css?family=Comforta" rel="stylesheet">
+    <script defer src="script.js" ></script>
 </head>
 <body>
+    <div id="filterButtons">
+        <button class="Brooklyn">Brooklyn</button>
+        <button class="Queens">Queens</button>
+        <button class="Bronx">Bronx</button>
+        <button class="Manhattan">Manhattan</button>
+        <button class="StatenIsland">Staten Island</button>
+    </div>
     <table id="payrollTable">
-        <thead>
+        <thead id="tableHeading">
             <tr>
                 <th>Employee Name</th>
                 <th>Job Title</th>
-                <th>Annual Salary</th>
+                <th id="variable">Annual Salary</th>
                 <th>Agency</th>
             </tr>
         </thead>
@@ -20,6 +28,5 @@
             <!-- Data will be populated here -->
         </tbody>
     </table>
-    <script src="script.js"></script>
 </body>
 </html>
