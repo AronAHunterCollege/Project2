@@ -226,8 +226,11 @@ filter.addEventListener('click', (event) => {
 
 document.getElementById('clear').addEventListener('click', (event) => {
     event.preventDefault();
-    sortBySalary(people_data_object.data)
+    if(letterIQ.value = ''){
+        return;
+    }
     letterIQ.value = '';
+    sortBySalary(people_data_object.data)
 })
 
 function returnMean(letter){
