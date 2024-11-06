@@ -8,17 +8,34 @@
     <script defer src="script.js" ></script>
 </head>
 <body>
+    <div class="letterEntry">
+        <form  class="letter">
+            <label>Filter by first name</label>
+            <input type="text" id="letterIQ" maxlength="1" placeholder="Filter by first letter"/>
+            <button id="clear" type="reset">Clear</button>
+            <button id="filter" type="submit">Filter</button>
+        </form>
+    </div>
     <div id="filterButtons">
+        <button class="All">All</button>
         <button class="Brooklyn">Brooklyn</button>
         <button class="Queens">Queens</button>
         <button class="Bronx">Bronx</button>
         <button class="Manhattan">Manhattan</button>
-        <button class="StatenIsland">Staten Island</button>
     </div>
+    <div id = minMaxMean>
+        <p class="borough"></p>
+        <p class="min"></p>
+        <p class="max"></p>
+        <p class="mean"></p>
+        <p class="candidates"></p>
+    </div>
+    <div id="highestByName"></div>
     <table id="payrollTable">
         <thead id="tableHeading">
             <tr>
-                <th>Employee Name</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>Job Title</th>
                 <th id="variable">Annual Salary</th>
                 <th>Agency</th>
