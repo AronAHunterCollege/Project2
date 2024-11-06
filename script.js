@@ -224,9 +224,10 @@ filter.addEventListener('click', (event) => {
     sortByFirstName(letter);
 })
 
-document.querySelector('#clear').addEventListener('click', (event) => {
+document.getElementById('clear').addEventListener('click', (event) => {
     event.preventDefault();
     sortBySalary(people_data_object.data)
+    letterIQ.value = '';
 })
 
 function returnMean(letter){
