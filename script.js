@@ -4,11 +4,33 @@ const highestByName = document.getElementById('highestByName');
 const people_data = localStorage.getItem("OpenNYC_Data");
 let people_data_object = null;
 
+
+function dissolveAnim(color) {
+    const dissolveDiv = document.createElement('div')
+    dissolveDiv.className = 'dissolve'
+    dissolveDiv.style.backgroundColor = color
+    document.body.appendChild(dissolveDiv)
+    const timeline = gsap.timeline();
+    timeline.to(dissolveDiv, {
+        opacity: 1,
+        duration: 1,
+        onComplete: () => {
+            gsap.to(dissolveDiv, {
+                opacity: 0,
+                duration: 2,
+                onComplete: () => {
+                    document.body.removeChild(dissolveDiv)
+                }
+            });
+        }
+    });
+}
+
 // Parse and structure the localStorage data if it exists
 if (people_data) {
     const parsedData = JSON.parse(people_data);
     // Accessing the data array within the stored object
-    people_data_object =  parsedData;
+    people_data_object = parsedData;
 }
 
 async function fetchData() {
@@ -66,6 +88,7 @@ function sortByLastName(letter) {
 }
 
 function sortByFirstName(letter) {
+    dissolveAnim('rgb(0, 0, 25)')
     const test = letter;
     const upper = test.toUpperCase()
     document.getElementById("tableBody").innerHTML = "";
@@ -99,50 +122,55 @@ function FilterByBorough(boroughName) {
     let meanSalary = 0;
     let min = 0;
     let max = 1000000000;
+    dissolveAnim('rgb(0, 0, 25)')
     people_data_object.data.forEach(person => {
         if (person.work_location_borough === boroughName) {
-            if(person.pay_basis == 'per Annum'){
+            if (person.pay_basis == 'per Annum') {
                 let num = parseFloat(person.base_salary)
                 meanSalary += num;
-                if (num > min){
+                if (num > min) {
                     min = num;
                 }
-                if(num < max){
+                if (num < max) {
                     max = num;
                 }
             }
-            else{
-                meanSalary +=((person.base_salary * 40) * 52);
+            else {
+                meanSalary += ((person.base_salary * 40) * 52);
             }
             totalPeople++;
         }
-        if(boroughName =="ALL"){
+        if (boroughName == "ALL") {
             people_data_object.data.forEach(person => {
-                if(person.pay_basis == 'per Annum'){
+                if (person.pay_basis == 'per Annum') {
                     let num = parseFloat(person.base_salary)
                     meanSalary += num;
-                    if (num > min){
+                    if (num > min) {
                         min = num;
                     }
-                    if(num < max){
+                    if (num < max) {
                         max = num;
                     }
                 }
-                else{
-                    meanSalary +=((person.base_salary * 40) * 52);
+                else {
+                    meanSalary += ((person.base_salary * 40) * 52);
                 }
                 totalPeople++;
             })
         }
     })
+    document.querySelector(".borough").innerHTML = "";
     document.querySelector(".min").innerHTML = "";
     document.querySelector(".max").innerHTML = "";
     document.querySelector(".mean").innerHTML = "";
-    document.querySelector(".min").innerHTML = min;
-    document.querySelector(".max").innerHTML = max;
-    document.querySelector(".mean").innerHTML = meanSalary / totalPeople;
+    document.querySelector(".candidates").innerHTML = "";
+    document.querySelector(".borough").innerHTML = "Filtered Borough: " + boroughName;
+    document.querySelector(".min").innerHTML = "Lowest Paid: $" + min;
+    document.querySelector(".max").innerHTML = "Highest Paid: $" + max;
+    document.querySelector(".mean").innerHTML = "Mean Salary: $" + meanSalary / totalPeople;
+    document.querySelector(".candidates").innerHTML = "People Averaged: $" + totalPeople;
     document.getElementById("tableBody").innerHTML = "";
-    if(boroughName =="ALL"){
+    if (boroughName == "ALL") {
         people_data_object.data.forEach(person => {
             appendToTable(person);
         })
@@ -162,50 +190,40 @@ function MeanSalary(boroughName) {
     let max = 1000000000;
     people_data_object.data.forEach(person => {
         if (person.work_location_borough === boroughName) {
-            if(person.pay_basis == 'per Annum'){
+            if (person.pay_basis == 'per Annum') {
                 let num = parseFloat(person.base_salary)
                 meanSalary += num;
-                if (num > min){
+                if (num > min) {
                     min = num;
                 }
-                if(num < max){
+                if (num < max) {
                     max = num;
                 }
             }
-            else{
-                meanSalary +=((person.base_salary * 40) * 52);
+            else {
+                meanSalary += ((person.base_salary * 40) * 52);
             }
             totalPeople++;
         }
-        if(boroughName =="ALL"){
+        if (boroughName == "ALL") {
             people_data_object.data.forEach(person => {
-                if(person.pay_basis == 'per Annum'){
+                if (person.pay_basis == 'per Annum') {
                     let num = parseFloat(person.base_salary)
                     meanSalary += num;
-                    if (num > min){
+                    if (num > min) {
                         min = num;
                     }
-                    if(num < max){
+                    if (num < max) {
                         max = num;
                     }
                 }
-                else{
-                    meanSalary +=((person.base_salary * 40) * 52);
+                else {
+                    meanSalary += ((person.base_salary * 40) * 52);
                 }
                 totalPeople++;
             })
         }
     })
-    document.querySelector(".borough").innerHTML = "";
-    document.querySelector(".min").innerHTML = "";
-    document.querySelector(".max").innerHTML = "";
-    document.querySelector(".mean").innerHTML = "";
-    document.querySelector(".candidates").innerHTML = "";
-    document.querySelector(".borough").innerHTML = boroughName;
-    document.querySelector(".min").innerHTML = "lowest paid " + min;
-    document.querySelector(".max").innerHTML = "highest paid " + max;
-    document.querySelector(".mean").innerHTML = "mean salary " + meanSalary / totalPeople;
-    document.querySelector(".candidates").innerHTML = "People averaged " + totalPeople;
 }
 
 // Event listeners for borough buttons
@@ -225,33 +243,34 @@ filter.addEventListener('click', (event) => {
 })
 
 document.getElementById('clear').addEventListener('click', (event) => {
+    dissolveAnim('rgb(0, 0, 25)')
     event.preventDefault();
-    if(letterIQ.value = ''){
+    if (letterIQ.value = '') {
         return;
     }
     letterIQ.value = '';
     sortBySalary(people_data_object.data)
 })
 
-function returnMean(letter){
+function returnMean(letter) {
     let totalPeople = 0;
     let meanSalary = 0;
     let min = 0;
     let max = 1000000000;
     people_data_object.data.forEach(person => {
         if (person.first_name && person.first_name[0] === letter) {
-            if(person.pay_basis == 'per Annum'){
+            if (person.pay_basis == 'per Annum') {
                 let num = parseFloat(person.base_salary)
                 meanSalary += num;
-                if (num > min){
+                if (num > min) {
                     min = num;
                 }
-                if(num < max){
+                if (num < max) {
                     max = num;
                 }
             }
-            else{
-                meanSalary +=((person.base_salary * 40) * 52);
+            else {
+                meanSalary += ((person.base_salary * 40) * 52);
             }
             totalPeople++;
         }
@@ -259,120 +278,120 @@ function returnMean(letter){
     return meanSalary / totalPeople;
 }
 
-let alphabet = 
-[ {
-    "meanSalary": 0,
-    "letter": "A"
-},{
-    "meanSalary": 0,
-    "letter": "B"
-},{
-    'meanSalary': 0,
-    'letter': "C"
-},
-{
-    'meanSalary': 0,
-    'letter': "D"
-},
-{
-    'meanSalary': 0,
-    'letter': "E"
-},
-{
-    'meanSalary': 0,
-    'letter': "F"
-},
-{
-    'meanSalary': 0,
-    'letter': "G"
-},
-{
-    'meanSalary': 0,
-    'letter': "H"
-},
-{
-    'meanSalary': 0,
-    'letter': "I"
-},
-{
-    'meanSalary': 0,
-    'letter': "J"
-},
-{
-    'meanSalary': 0,
-    'letter': "K"
-},
-{
-    'meanSalary': 0,
-    'letter': "L"
-},
-{
-    'meanSalary': 0,
-    'letter': "M"
-},
-{
-    'meanSalary': 0,
-    'letter': "N"
-},
-{
-    'meanSalary': 0,
-    'letter': "O"
-},
-{
-    'meanSalary': 0,
-    'letter': "P"
-},
-{
-    'meanSalary': 0,
-    'letter': "Q"
-},
-{
-    'meanSalary': 0,
-    'letter': "R"
-},
-{
-    'meanSalary': 0,
-    'letter': "S"
-},
-{
-    'meanSalary': 0,
-    'letter': "T"
-},
-{
-    'meanSalary': 0,
-    'letter': "U"
-},
-{
-    'meanSalary': 0,
-    'letter': "V"
-},
-{
-    'meanSalary': 0,
-    'letter': "W"
-},
-{
-    'meanSalary': 0,
-    'letter': "X"
-},
-{
-    'meanSalary': 0,
-    'letter': "Y"
-},
-{
-    'meanSalary': 0,
-    'letter': "Z"
-}
-];
+let alphabet =
+    [{
+        "meanSalary": 0,
+        "letter": "A"
+    }, {
+        "meanSalary": 0,
+        "letter": "B"
+    }, {
+        'meanSalary': 0,
+        'letter': "C"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "D"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "E"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "F"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "G"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "H"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "I"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "J"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "K"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "L"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "M"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "N"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "O"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "P"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "Q"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "R"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "S"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "T"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "U"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "V"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "W"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "X"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "Y"
+    },
+    {
+        'meanSalary': 0,
+        'letter': "Z"
+    }
+    ];
 
 function sortByNameValue() {
-    for(let i = 0; i < alphabet.length; i++){
+    for (let i = 0; i < alphabet.length; i++) {
         alphabet[i].meanSalary = returnMean(alphabet[i].letter)
     }
     alphabet.sort((a, b) => b.meanSalary - a.meanSalary);
-    for(let i = 0; i < alphabet.length; i++){
+    for (let i = 0; i < alphabet.length; i++) {
         const person = document.createElement('p');
         person.innerHTML = `
-            <p>${alphabet[i].letter + " " + alphabet[i].meanSalary }</p>`;
+            <p>${alphabet[i].letter + " " + alphabet[i].meanSalary}</p>`;
         highestByName.appendChild(person);
     }
 }
@@ -380,7 +399,7 @@ function sortByNameValue() {
 // const tableBody = document.getElementById('tableBody');
 // const people_data = localStorage.getItem("OpenNYC_Data"); //localstorage
 // let people_data_object = null;//localstorage object
-// let tweaked_people_data = null; 
+// let tweaked_people_data = null;
 // if (people_data) { //if this exists
 //     people_data_object = JSON.parse(people_data) //then create the object value
 //     tweaked_people_data = structuredClone(people_data_object);
