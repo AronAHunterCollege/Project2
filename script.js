@@ -167,10 +167,10 @@ function FilterByBorough(boroughName) {
     document.querySelector(".mean").innerHTML = "";
     document.querySelector(".candidates").innerHTML = "";
     document.querySelector(".borough").innerHTML = "Filtered Borough: " + boroughName;
-    document.querySelector(".min").innerHTML = "Lowest Paid: $" + min;
-    document.querySelector(".max").innerHTML = "Highest Paid: $" + max;
+    document.querySelector(".min").innerHTML = "Lowest Paid: $" + max;
+    document.querySelector(".max").innerHTML = "Highest Paid: $" + min;
     document.querySelector(".mean").innerHTML = "Mean Salary: $" +rounded;
-    document.querySelector(".candidates").innerHTML = "People Averaged: $" + totalPeople;
+    document.querySelector(".candidates").innerHTML = "People Averaged: " + totalPeople;
     document.getElementById("tableBody").innerHTML = "";
     if (boroughName == "ALL") {
         people_data_object.data.forEach(person => {
