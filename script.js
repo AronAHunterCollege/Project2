@@ -13,11 +13,11 @@ function dissolveAnim(color) {
     const timeline = gsap.timeline();
     timeline.to(dissolveDiv, {
         opacity: 1,
-        duration: 1,
+        duration: .5,
         onComplete: () => {
             gsap.to(dissolveDiv, {
                 opacity: 0,
-                duration: 2,
+                duration: .5,
                 onComplete: () => {
                     document.body.removeChild(dissolveDiv)
                 }
@@ -159,6 +159,8 @@ function FilterByBorough(boroughName) {
             })
         }
     })
+    const number = meanSalary / totalPeople;
+    const rounded = number.toFixed(2);
     document.querySelector(".borough").innerHTML = "";
     document.querySelector(".min").innerHTML = "";
     document.querySelector(".max").innerHTML = "";
@@ -167,7 +169,7 @@ function FilterByBorough(boroughName) {
     document.querySelector(".borough").innerHTML = "Filtered Borough: " + boroughName;
     document.querySelector(".min").innerHTML = "Lowest Paid: $" + min;
     document.querySelector(".max").innerHTML = "Highest Paid: $" + max;
-    document.querySelector(".mean").innerHTML = "Mean Salary: $" + meanSalary / totalPeople;
+    document.querySelector(".mean").innerHTML = "Mean Salary: $" +rounded;
     document.querySelector(".candidates").innerHTML = "People Averaged: $" + totalPeople;
     document.getElementById("tableBody").innerHTML = "";
     if (boroughName == "ALL") {
